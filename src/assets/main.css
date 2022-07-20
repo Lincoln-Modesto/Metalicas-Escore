@@ -15,8 +15,8 @@ body{
   height: 100vh;
   
   scroll-behavior: smooth;
-  background-color: #fff;
   overflow-x: hidden;
+  background-color: #fff;
 }
 
 svg, img{

@@ -8,7 +8,8 @@
         </div>
         <h1 class="title">Metalica Escore</h1>
         <p>Aplicação web para cálculo e dimensionamento de escoramento de escoras metálicas</p>
-        <p>Desenvolvida por Davyson Santos para a defesa de TCC2 do curso de bacharelado em Engenharia Civil - Instituto Federal de Sergipe (Câmpus Estância)</p>
+        <p>Desenvolvida por Davyson Santos para a defesa de TCC2 do curso de bacharelado em Engenharia Civil - Instituto
+          Federal de Sergipe (Câmpus Estância)</p>
         <router-link to="#calcular">
           <button type="button" class="btn btn-lg btn-success">Calcular</button>
         </router-link>
@@ -61,14 +62,14 @@
             <h5 class="mb-4">Parâmetros estruturais</h5>
             <div class="d-flex justify-content-start align-items-center row">
               <BaseInput title="Pé direito (m)" v-model="state.peDireito" class="me-5 col mt-2" />
-              <BaseInput title="Capeamento (cm)" v-model="state.capeamento" class="col mt-2"/>
+              <BaseInput title="Capeamento (cm)" v-model="state.capeamento" class="col mt-2" />
             </div>
           </div>
           <div class="col mt-4">
             <h5 class="mb-4">Distâncias</h5>
             <div class="d-flex justify-content-start align-items-center row">
               <BaseInput title="Largura da laje (m)" v-model="state.largura" class="me-5 col mt-2" />
-              <BaseInput title="Comprimento da Laje (m)" v-model="state.comprimento" class="col mt-2"/>
+              <BaseInput title="Comprimento da Laje (m)" v-model="state.comprimento" class="col mt-2" />
             </div>
           </div>
         </div>
@@ -99,7 +100,7 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-success mt-4">Gerar Relatório</button>
+            <button @click="handlePdf" class="btn btn-success mt-4">Gerar Relatório</button>
           </div>
           <div class="d-flex justify-content-center flex-column align-items-center col">
             <h3><b>{{ state.escoraResultante[0].nome }}</b></h3>
@@ -118,7 +119,7 @@
     <footer>
       <div class="text-center d-flex justify-content-center flex-column align-items-center my-3">
         <img src="../assets/imgs/logo.png" alt="logo-metalica-escore" class="logo-img">
-        <h2 class="title">Metalica Escore</h2>
+        <h3 class="title">Metalica Escore</h3>
       </div>
       <div class="d-flex justify-content-center align-items-center mt-5">
         <div class="mx-5 d-flex flex-column align-items-center">
@@ -146,11 +147,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" >
 import { defineComponent, reactive } from "vue";
-import BaseInput from '@/components/BaseInput.vue'
 import { EscoraDTO } from '@/types/escoras.dto'
 import { useToast } from 'vue-toastification'
+import { jsPDF } from "jspdf";
+import BaseInput from '@/components/BaseInput.vue'
 
 const peso_proprio_concreto = 25 //kn/m³
 const cargas_adicionais = 7.627 //kn/m²
@@ -297,9 +299,17 @@ export default defineComponent({
       state.escoraResultante = [...escora_selecionada]
     }
 
+    function handlePdf() {
+      const doc = new jsPDF();
+
+      doc.text("Hello world!", 10, 10);
+      doc.save("a4.pdf");
+    }
+
     return {
       state,
-      handleCalc
+      handleCalc,
+      handlePdf
     }
   }
 });
@@ -323,6 +333,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 /*----------header----------- */
@@ -364,33 +375,36 @@ header {
   height: 400px;
 }
 
-  @media (max-width: 927px){
-    .aplication{
-      flex-direction: column;
-      padding: 0;
-    }
-
-    .aplication > div{ 
-      padding: 0;
-    }
-
-    .aplication-img{
-      align-items: center !important;
-    }
+@media (max-width: 927px) {
+  .aplication {
+    flex-direction: column;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x));
+    padding-left: calc(var(--bs-gutter-x));
   }
 
-  @media (max-width: 825px){
-    .resultados{
-      flex-direction: column-reverse;
-    }
-
-    .resultados-container{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+  .aplication>div {
+    padding: 0;
   }
+
+  .aplication-img {
+    align-items: center !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 825px) {
+  .resultados {
+    flex-direction: column-reverse;
+  }
+
+  .resultados-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}
 
 /*----------Footer----------- */
 footer {
@@ -402,6 +416,20 @@ footer {
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
 }
 
+@media (max-width: 500px) {
+  .title {
+    font-weight: 600;
+    font-size: 2rem;
+  }
+
+  .logo-img {
+    zoom: 0.7;
+  }
+
+  .img-escoramento {
+    zoom: 0.7;
+  }
+}
 
 .social-img {
   width: 24px;
