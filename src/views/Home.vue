@@ -29,19 +29,28 @@
           O emprego de cimbramento metálico assegura esses três fatores na obra, uma vez que esse tipo de material pode
           garantir melhor acabamento,
           redução do tempo e precisão na execução e elevada capacidade de carga dispensando grandes deformações,
-          garantindo, assim, a segurança na obra.
+          proporcionando mais segurança a obra.
         </p>
         <div class="d-flex justify-content-between mt-3 align-items-center row w-full aplication">
           <div class="col">
-            <p>Metalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              Escore Metalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas Escore</p>
+            <p>A aplicação Metalicas Escore entra como uma ferramenta de ajuda no dimensionamento desses elementos
+              estruturais.
+              Com ela é possível validar e escolher dentre as escoras selecionadas, a que mais se adequa a situação
+              encontrada em campo,
+              considerando a segurança e racionalidade. Assim, a aplicação Metálicas escore tem a capacidade de escolher
+              a escora,
+              avaliar se ela é capaz de suportar o carregamento da laje e otimizar a utilização por escolher as escoras
+              em ordem
+              crescente de peso,ou seja, a aplicação sempre optará, desde que garantida o suporte de carga, pela escora
+              mais
+              leve afim de diminuir o peso desses elementos sobre a estrutura da edificação.</p>
             <br>
-            <p>Metalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              Escore Metalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-              EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas Escore</p>
+            <p>Portanto, a aplicação Meálicas Escore, tem por função auxiliar o engenheiro civil
+              a dimensionar de maneira simples e adequada a alocação do seu escoramento metálico em lajes maciças e
+              treliçadas</p>
+
+            <p>Todas as escoras analisadas e calculadas são da fabricante <a href="https://www.mills.com.br/"
+                target="_blank"><b>Mills</b></a> </p>
           </div>
           <div class="ms-5 d-flex justify-content-center align-items-end flex-column col aplication-img">
             <div class="text-center d-flex justify-content-center flex-column align-items-center">
@@ -53,10 +62,20 @@
       </section>
       <section class="py-5 my-3 px-3 row" id="calcular">
         <h3><b>Cálculo</b></h3>
-        <p>Metalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas
-          EscoreMetalicas EscoreMetalicas EscoreMetalicas Escore Metalicas EscoreMetalicas EscoreMetalicas
-          EscoreMetalicas
-          EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas EscoreMetalicas Escore</p>
+        <p>O cálculo do dimensionamento da estrutura de escoramento metálico feito pela aplicação obedecerá as condições
+          encontradas na
+          <b>ABNT NBR 15696 - Fôrmas e escoramentos para estruturas de concreto – projeto, dimensionamento e
+            procedimentos executivos</b>,
+          bem como a <b>NBR 8800 – Projeto de estruturas de aço e de estruturas mista de aço e concreto de edifícios
+            (2008). </b>
+          Os parâmetros a serem considerados para o dimensionamento serão o pé direto da edificação (metros), capeamento
+          (centímetros) e dimensões da laje (metros).
+          O pé direito influenciará diretamente na capacidade de carga das escoras e o capeamento no peso próprio da
+          estrutura,
+          já as dimensões da laje servirão para a correta distribuição das escoras em toda área da estrutura.
+        </p>
+
+        <p>Por favor, preencha os campos abaixo e certifique-se de que as respectivas unidades estão corretas</p>
         <div class="form-inputs mt-5 d-flex row">
           <div class="me-5 col mt-4">
             <h5 class="mb-4">Parâmetros estruturais</h5>
@@ -77,7 +96,7 @@
           <button type="button" @click="handleCalc" class="btn btn-success mt-4">Calcular</button>
         </div>
       </section>
-      <section class="py-5 my-3 px-3 row" v-if="state.escoraResultante[0].nome">
+      <section class="py-5 my-3 px-3 row" v-if="state.escoraResultante[0].nome && !state.error">
         <h3 class="mb-3"><b>Resultados</b></h3>
         <div class="d-flex justify-content-between align-items-start row resultados">
           <div class="col resultados-container">
@@ -85,8 +104,8 @@
               <div>
                 <h5>Cargas</h5>
                 <div class="d-flex justify-content-center align-items-start flex-column">
-                  <span>Peso: <b>{{ state.pesoProprio.toFixed(2) }} kn/m³</b></span>
-                  <span>Peso Próprio Majorado: <b>{{ state.pesoProprioMajorado.toFixed(2) }} kn/m³</b></span>
+                  <span>Peso Próprio: <b>{{ state.pesoProprio.toFixed(2) }} kgf/m²</b></span>
+                  <span>Peso Próprio Majorado: <b>{{ state.pesoProprioMajorado.toFixed(2) }} kgf/m²</b></span>
                 </div>
               </div>
               <div class="mx-5">
@@ -94,8 +113,8 @@
                 <div class="d-flex justify-content-center align-items-start flex-column">
                   <span>Nome: <b>{{ state.escoraResultante[0].nome }}</b></span>
                   <span>Carga Admissível: <b>{{ state.escoraResultante[0].carga_adimissivel.toFixed(2) }}
-                      kg/m²</b></span>
-                  <span>Carga Minorada: <b>{{ state.escoraResultante[0].carga_minorada.toFixed(2) }} kg/m²</b></span>
+                      kgf/m²</b></span>
+                  <span>Carga Minorada: <b>{{ state.escoraResultante[0].carga_minorada.toFixed(2) }} kgf/m²</b></span>
                   <span>Peso: <b>{{ state.escoraResultante[0].peso }} Kg</b></span>
                 </div>
               </div>
@@ -124,7 +143,8 @@
       <div class="d-flex justify-content-center align-items-center mt-5">
         <div class="mx-5 d-flex flex-column align-items-center">
           <h4>Davyson Santos</h4>
-          <a href="" target="_blank" class="d-flex">
+          <a href="https://br.linkedin.com/in/davyson-santos-995344120?trk=prof-samename-picture" target="_blank"
+            class="d-flex">
             Linkedin
             <img src="../assets/imgs/linkedIn.png" class="social-img" alt="Linkedin Davyson Santos">
           </a>
@@ -214,10 +234,14 @@ export default defineComponent({
       comprimento: '',
       escoraResultante: [{} as EscoraDTO],
       pesoProprio: 0,
-      pesoProprioMajorado: 0
+      pesoProprioMajorado: 0,
+      numeroDeEscorasLargura: 0,
+      numeroDeEscorasComprimento: 0,
+      distanciaEntreEscoras: 0,
+      error: false
     })
 
-    function handleCalc() {
+    function handleCalc(): void {
 
       if (
         state.peDireito === '' ||
@@ -239,15 +263,26 @@ export default defineComponent({
         return
       }
 
+      if (Number(state.peDireito) > 4.5) {
+        toast.error('Por favor, o pé direito máximo é de 4.5 metros')
+        return
+      }
+
+      if(Number(state.peDireito) < 1.7) {
+        toast.error('Por favor, o pé direito mínimo é de 1.7 metros')
+        return
+      }
+
       handleCargaEscora()
       handleCargaAtuante()
+      handleDistancias()
     }
 
-    function handleCargaEscora() {
+    function handleCargaEscora(): void {
       const arr: Array<EscoraDTO> = escoras
 
       const escoraço = -285.71 * Number(state.peDireito) + 1885.70
-      const escoraço_2 = -597.08 * Number(state.peDireito) + 2756.89
+      const escoraço_2 = -291.29 * Number(state.peDireito) + 2010.67
       const escora_2t = -416.666 * Number(state.peDireito) + 3250
       const escora_deck = -571.42 * Number(state.peDireito) + 4827.14
       const escora_pa = -447.15 * Number(state.peDireito) + 3253.23
@@ -274,14 +309,14 @@ export default defineComponent({
       })
     }
 
-    function handleCargaAtuante() {
-      state.pesoProprio = ((Number(state.capeamento) * 0.01) * peso_proprio_concreto) + (cargas_adicionais)
+    function handleCargaAtuante(): void {
+      state.pesoProprio = (((Number(state.capeamento) * 0.01) * peso_proprio_concreto) + (cargas_adicionais)) * 100
 
-      state.pesoProprioMajorado = state.pesoProprio * 140 // kg/m²
+      state.pesoProprioMajorado = state.pesoProprio * 1.40 // kg/m²
       handleSelecionaEscora()
     }
 
-    function handleSelecionaEscora() {
+    function handleSelecionaEscora(): void {
       const peso_escora: Array<number> = []
 
       const escoras_filtradas = escoras.filter((escora) => {
@@ -297,12 +332,34 @@ export default defineComponent({
       })
 
       state.escoraResultante = [...escora_selecionada]
+
+      if (state.escoraResultante.length === 0) {
+        state.error = true
+        toast.error('Os valores fornecidos não estão dentro dos limites aceitos')
+        return
+      }
     }
 
-    function handlePdf() {
+    function handleDistancias(): void {
+
+      state.numeroDeEscorasComprimento = Number(state.comprimento) / 1.3
+      state.numeroDeEscorasLargura = Number(state.largura) / 1.3
+
+      if (state.comprimento > state.largura) {
+        state.distanciaEntreEscoras = Number(state.comprimento) / state.numeroDeEscorasComprimento
+      } else {
+        state.distanciaEntreEscoras = Number(state.largura) / state.numeroDeEscorasLargura
+      }
+    }
+
+    function handlePdf(): void {
       const doc = new jsPDF();
 
-      doc.text("Hello world!", 10, 10);
+      doc.setFontSize(22);
+      doc.text("Resultados e detalhamento", 20, 20);
+
+      doc.setFontSize(16);
+      doc.text("This is some normal sized text underneath.", 20, 30);
       doc.save("a4.pdf");
     }
 
@@ -334,6 +391,7 @@ a:hover {
   align-items: center;
   flex-direction: column;
   overflow-x: hidden;
+  background-color: #fff;
 }
 
 /*----------header----------- */
