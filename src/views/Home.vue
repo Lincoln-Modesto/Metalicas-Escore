@@ -486,9 +486,9 @@ export default defineComponent({
       doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
       doc.text("Croqui:", 20, 170);
-      doc.addImage(lajeImg as any, "PNG", 20, 180, 130, 150);
+      doc.addImage(lajeImg as any, "PNG", 20, 180, 100, 130);
  
-      doc.save("a4.pdf");
+      doc.save("Metalicas Escore - Resultados e detalhamento.pdf");
       
     }
 
