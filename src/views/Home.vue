@@ -96,7 +96,7 @@
           <button type="button" @click="handleCalc" class="btn btn-success mt-4">Calcular</button>
         </div>
       </section>
-      <section class="py-5 my-3 px-3 row" v-if="state.escoraResultante[0].nome && !state.error">
+      <section class="py-5 my-3 px-3 row" v-if="state.escoraResultante[0].nome && !error">
         <h3 class="mb-3"><b>Resultados</b></h3>
         <div class="d-flex justify-content-between align-items-start row resultados">
           <div class="col resultados-container">
@@ -168,11 +168,12 @@
 </template>
 
 <script lang="ts" >
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { EscoraDTO } from '@/types/escoras.dto'
 import { useToast } from 'vue-toastification'
 import { jsPDF } from "jspdf";
 import BaseInput from '@/components/BaseInput.vue'
+import { lajesImgs, escorasImgs } from '@/utils/base64Files'
 
 const peso_proprio_concreto = 25 //kn/m³
 const cargas_adicionais = 7.627 //kn/m²
@@ -238,8 +239,8 @@ export default defineComponent({
       numeroDeEscorasLargura: 0,
       numeroDeEscorasComprimento: 0,
       distanciaEntreEscoras: 0,
-      error: false
     })
+    const error = ref(false)
 
     function handleCalc(): void {
 
@@ -259,17 +260,22 @@ export default defineComponent({
         Number(state.comprimento) < 0 ||
         Number(state.largura) < 0
       ) {
-        toast.error('Por favor, os nenhum valor pode ser um número negativo!')
+        toast.error('Nenhum valor pode ser um número negativo!')
         return
       }
 
       if (Number(state.peDireito) > 4.5) {
-        toast.error('Por favor, o pé direito máximo é de 4.5 metros')
+        toast.error('O pé direito máximo é de 4.5 metros!')
         return
       }
 
-      if(Number(state.peDireito) < 1.7) {
-        toast.error('Por favor, o pé direito mínimo é de 1.7 metros')
+      if (Number(state.peDireito) < 1.7) {
+        toast.error('O pé direito mínimo é de 1.7 metros!')
+        return
+      }
+
+      if (Number(state.comprimento) > 5 || Number(state.largura) > 5) {
+        toast.error('Comprimento e largura máximos são de até 5 metros')
         return
       }
 
@@ -334,7 +340,7 @@ export default defineComponent({
       state.escoraResultante = [...escora_selecionada]
 
       if (state.escoraResultante.length === 0) {
-        state.error = true
+        error.value = true
         toast.error('Os valores fornecidos não estão dentro dos limites aceitos')
         return
       }
@@ -353,20 +359,140 @@ export default defineComponent({
     }
 
     function handlePdf(): void {
+      let x = 0
+      let y = 0
+
+      if (Math.round(Number(state.comprimento)) >= Math.round(Number(state.largura))) {
+        y = Math.round(Number(state.comprimento))
+        x = Math.round(Number(state.largura))
+      } else {
+        y = Math.round(Number(state.largura))
+        x = Math.round(Number(state.comprimento))
+      }
+
+      const propLaje = `laje${x}x${y}`
+      const lajeImgArr = Object.values( lajesImgs ).filter( laje => laje.name === propLaje );
+      const lajeImg = lajeImgArr[0]()
+
+      const escoraImgArr = Object.values( escorasImgs ).filter( escora => escora.name.includes(state.escoraResultante[0].path) )
+      const escora1 = escoraImgArr[0]()
+      const escora2 = escoraImgArr[1]()
+      // const escora3 = escoraImgArr[2]()
+
       const doc = new jsPDF();
 
       doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
       doc.text("Resultados e detalhamento", 20, 20);
 
-      doc.setFontSize(16);
-      doc.text("This is some normal sized text underneath.", 20, 30);
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text("Dados do usuário", 20, 40);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Pé direito:", 20, 50);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.peDireito} metros`, 45, 50);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Capeamento:", 20, 60);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.capeamento} centímetros`, 53, 60);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Comprimento:", 100, 50);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.comprimento} metros`, 135, 50);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Largura:", 100, 60);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.largura} metros`, 120, 60);
+
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text("Cargas", 20, 80);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Peso próprio:", 20, 90);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.pesoProprio.toFixed(2)} kgf/m²`, 52, 90);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("peso próprio Majorado:", 20, 100);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.pesoProprioMajorado.toFixed(2)} kgf/m²`, 73, 100);
+
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text("Escora Selecionada", 20, 120);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Nome:", 20, 130);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.escoraResultante[0].nome}`, 38, 130);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Carga admissível:", 20, 140);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.escoraResultante[0].carga_adimissivel.toFixed(2)} kgf/m²`, 63, 140);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Carga minorada:", 20, 150);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.escoraResultante[0].carga_minorada.toFixed(2)} kgf/m²`, 60, 150);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Peso:", 20, 160);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${state.escoraResultante[0].peso} kg`, 38, 160);
+
+      doc.addImage(escora1 as  any, "PNG", 50, 180, 21, 100);
+      doc.addImage(escora2 as  any, "PNG", 20, 180, 21, 100);
+      // doc.addImage(escora3 as  any, "PNG", 80, 180, 21, 100);
+
+      doc.addPage("a4");
+      doc.addImage(lajeImg as any, "PNG", 20, 20, 130, 150);
+ 
       doc.save("a4.pdf");
+      
     }
 
     return {
       state,
       handleCalc,
-      handlePdf
+      handlePdf,
+      error
     }
   }
 });
