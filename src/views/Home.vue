@@ -173,7 +173,7 @@ import { EscoraDTO } from '@/types/escoras.dto'
 import { useToast } from 'vue-toastification'
 import { jsPDF } from "jspdf";
 import BaseInput from '@/components/BaseInput.vue'
-import { lajesImgs, escorasImgs } from '@/utils/base64Files'
+import { lajesImgs } from '@/utils/base64Files'
 
 const peso_proprio_concreto = 25 //kn/m³
 const cargas_adicionais = 7.627 //kn/m²
@@ -374,11 +374,12 @@ export default defineComponent({
       const lajeImgArr = Object.values( lajesImgs ).filter( laje => laje.name === propLaje );
       const lajeImg = lajeImgArr[0]()
 
-      const escoraImgArr = Object.values( escorasImgs ).filter( escora => escora.name.includes(state.escoraResultante[0].path) )
-      const escora1 = escoraImgArr[0]()
-      const escora2 = escoraImgArr[1]()
-      // const escora3 = escoraImgArr[2]()
+      // const escoraImgArr = Object.values( escorasImgs ).filter( escora => escora.name.includes(state.escoraResultante[0].path) )
+      // const escora1 = escoraImgArr[0]()
+      // const escora2 = escoraImgArr[1]()
 
+      // const escora3 = escoraImgArr[2]()
+  
       const doc = new jsPDF();
 
       doc.setFontSize(22);
@@ -477,12 +478,15 @@ export default defineComponent({
       doc.setFont("helvetica", "bold");
       doc.text(`${state.escoraResultante[0].peso} kg`, 38, 160);
 
-      doc.addImage(escora1 as  any, "PNG", 50, 180, 21, 100);
-      doc.addImage(escora2 as  any, "PNG", 20, 180, 21, 100);
+      // doc.addImage(escora1 as  any, "PNG", 50, 180, 21, 100);
+      // doc.addImage(escora2 as  any, "PNG", 20, 180, 21, 100);
       // doc.addImage(escora3 as  any, "PNG", 80, 180, 21, 100);
 
-      doc.addPage("a4");
-      doc.addImage(lajeImg as any, "PNG", 20, 20, 130, 150);
+      // doc.addPage("a4");
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text("Croqui:", 20, 170);
+      doc.addImage(lajeImg as any, "PNG", 20, 180, 130, 150);
  
       doc.save("a4.pdf");
       
