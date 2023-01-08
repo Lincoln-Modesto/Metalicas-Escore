@@ -31,7 +31,7 @@
     </header>
     <main class="container-app">
       <section class="py-5 my-3 px-3 row">
-        <h3 class="mb-3"><b>A aplicação</b></h3>
+        <h2 class="mb-3"><b>A aplicação</b></h2>
         <p>
           Na construção civil, ao falar de desafios ou dificuldades no quesito
           dimensionamento e execução, pode-se citar o cimbramento de estruturas
@@ -119,7 +119,7 @@
         </div>
       </section>
       <section class="py-5 my-3 px-3 row" id="calcular">
-        <h3><b>Cálculo</b></h3>
+        <h2><b>Cálculo</b></h2>
         <p>
           O cálculo do dimensionamento da estrutura de escoramento metálico
           feito pela aplicação obedecerá as condições encontradas na
@@ -144,8 +144,18 @@
           respectivas unidades estão corretas
         </p>
         <div class="form-inputs mt-5 d-flex row">
+          <div class="me-5 mt-4">
+            <h3>Tipo da laje:</h3>
+            <div class="col-sm-5 d-flex align-items-center mt-5">
+              <h5>Laje Treliçada</h5>
+              <input type="checkbox" v-model="state.tipoLajeMacica" @change="tipoLaje" id="switch" /><label for="switch" class="mx-3" >Toggle</label>
+              <h5>Laje Maciça</h5>
+            </div>
+          </div>
+        </div>
+        <div class="form-inputs mt-5 d-flex row">
           <div class="me-5 col mt-4">
-            <h5 class="mb-4">Parâmetros estruturais</h5>
+            <h3 class="mb-4">Parâmetros estruturais</h3>
             <div class="d-flex justify-content-start align-items-center row">
               <BaseInput
                 title="Pé direito (m)"
@@ -153,14 +163,14 @@
                 class="me-5 col mt-2"
               />
               <BaseInput
-                title="Capeamento (cm)"
+                :title="state.title"
                 v-model="state.capeamento"
                 class="col mt-2"
               />
             </div>
           </div>
           <div class="col mt-4">
-            <h5 class="mb-4">Distâncias</h5>
+            <h3 class="mb-4">Distâncias</h3>
             <div class="d-flex justify-content-start align-items-center row">
               <BaseInput
                 title="Largura da laje (m)"
@@ -189,7 +199,7 @@
         class="py-5 my-3 px-3 row"
         v-if="state.escoraResultante[0].nome && !error"
       >
-        <h3 class="mb-3"><b>Resultados</b></h3>
+        <h2 class="mb-3"><b>Resultados</b></h2>
         <div
           class="
             d-flex
@@ -463,6 +473,8 @@ export default defineComponent({
       numeroDeEscorasLargura: 0,
       numeroDeEscorasComprimento: 0,
       distanciaEntreEscoras: 0,
+      tipoLajeMacica: false,
+      title: "Capeamento (cm)",
     });
     const error = ref(false);
     const escoraço = -285.71 * Number(state.peDireito) + 1885.7;
@@ -479,6 +491,10 @@ export default defineComponent({
       { nome: "Escora Pa", value: escora_pa, alias: "Escora_Pa" },
       { nome: "Escora Pb", value: escora_pb, alias: "Escora_Pb" },
     ];
+
+    function tipoLaje(): void {
+      state.tipoLajeMacica ? state.title = "Espessura (cm)" : state.title = "Capeamento (cm)"
+    }
 
     function handleCalc(): void {
       if (
@@ -665,7 +681,7 @@ export default defineComponent({
 
       doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
-      doc.text("Capeamento:", 20, 60);
+      doc.text(`${state.title.replace(' (cm)', "")}`, 20, 60);
 
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
@@ -785,6 +801,7 @@ export default defineComponent({
       state,
       handleCalc,
       handlePdf,
+      tipoLaje,
       error,
     };
   },
@@ -882,6 +899,51 @@ header {
     flex-direction: column;
   }
 }
+
+/*----------Toggle----------- */
+
+input[type=checkbox]{
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 80px;
+	height: 40px;
+	background: grey;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+label:after {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	background: #fff;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+input:checked + label {
+	background: #198754;
+}
+
+input:checked + label:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+label:active:after {
+	width: 130px;
+}
+
 
 /*----------Footer----------- */
 footer {
