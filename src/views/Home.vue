@@ -20,9 +20,9 @@
           metálicas
         </p>
         <p>
-          Desenvolvida por Davyson Santos para a defesa de TCC2 do curso de
-          bacharelado em Engenharia Civil - Instituto Federal de Sergipe (Câmpus
-          Estância)
+          Desenvolvida em conjunto por Davyson Santos, Lincoln Modesto e Thiago Remacre para a defesa de TCC2 
+          do discente Davyson Santos no curso de bacharelado em Engenharia Civil 
+          - Instituto Federal de Sergipe (Câmpus Estância)
         </p>
         <router-link to="#calcular">
           <button type="button" class="btn btn-lg btn-success">Calcular</button>
@@ -345,7 +345,7 @@
         />
         <h3 class="title">Metalica Escore</h3>
       </div>
-      <div class="d-flex justify-content-center align-items-center mt-5">
+      <div class="footer-content d-flex justify-content-center align-items-center mt-5">
         <div class="mx-5 d-flex flex-column align-items-center">
           <h4>Davyson Santos</h4>
           <a
@@ -361,7 +361,7 @@
             />
           </a>
         </div>
-        <div class="mx-5">
+        <div class="mx-5 d-flex flex-column align-items-center">
           <h4>Lincoln Modesto</h4>
           <div class="d-flex justify-content-center align-items-center">
             <a
@@ -389,6 +389,21 @@
               />
             </a>
           </div>
+        </div>
+        <div class="mx-5 d-flex flex-column align-items-center">
+          <h4>Eng. D.S.c Thiago Remacre</h4>
+          <a
+            href="https://www.linkedin.com/in/thiago-a-remacre-munareto-lima-40334a32"
+            target="_blank"
+            class="d-flex"
+          >
+            Linkedin
+            <img
+              src="../assets/imgs/linkedIn.png"
+              class="social-img"
+              alt="Linkedin Davyson Santos"
+            />
+          </a>
         </div>
       </div>
     </footer>
@@ -944,7 +959,6 @@ label:active:after {
 	width: 130px;
 }
 
-
 /*----------Footer----------- */
 footer {
   width: 100%;
@@ -967,6 +981,22 @@ footer {
 
   .img-escoramento {
     zoom: 0.7;
+  }
+}
+
+@media (max-width: 986px) {
+  footer {
+    height: 470px;
+  }
+
+  .footer-content{
+    flex-direction: column;
+    margin-top: 20px !important;
+  }
+
+  .footer-content div {
+    margin: 10px 0;
+    text-align: center;
   }
 }
 
