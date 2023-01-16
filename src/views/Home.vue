@@ -20,9 +20,10 @@
           metálicas
         </p>
         <p>
-          Desenvolvida em conjunto por Davyson Santos, Lincoln Modesto e Thiago Remacre para a defesa de TCC2 
-          do discente Davyson Santos no curso de bacharelado em Engenharia Civil 
-          - Instituto Federal de Sergipe (Câmpus Estância)
+          Desenvolvida em conjunto por Davyson Santos, Lincoln Modesto e Thiago
+          Remacre para a defesa de TCC2 do discente Davyson Santos no curso de
+          bacharelado em Engenharia Civil - Instituto Federal de Sergipe (Câmpus
+          Estância)
         </p>
         <router-link to="#calcular">
           <button type="button" class="btn btn-lg btn-success">Calcular</button>
@@ -148,7 +149,12 @@
             <h3>Tipo da laje:</h3>
             <div class="col-sm-5 d-flex align-items-center mt-5">
               <h5>Laje Treliçada</h5>
-              <input type="checkbox" v-model="state.tipoLajeMacica" @change="tipoLaje" id="switch" /><label for="switch" class="mx-3" >Toggle</label>
+              <input
+                type="checkbox"
+                v-model="state.tipoLajeMacica"
+                @change="tipoLaje"
+                id="switch"
+              /><label for="switch" class="mx-3">Toggle</label>
               <h5>Laje Maciça</h5>
             </div>
           </div>
@@ -345,7 +351,15 @@
         />
         <h3 class="title">Metalica Escore</h3>
       </div>
-      <div class="footer-content d-flex justify-content-center align-items-center mt-5">
+      <div
+        class="
+          footer-content
+          d-flex
+          justify-content-center
+          align-items-center
+          mt-5
+        "
+      >
         <div class="mx-5 d-flex flex-column align-items-center">
           <h4>Davyson Santos</h4>
           <a
@@ -432,6 +446,8 @@ const escoras: Array<EscoraDTO> = [
     carga_adimissivel: 0,
     carga_minorada: 0,
     peso: 13.58,
+    max: 3.1,
+    min: 1.7,
   },
   {
     nome: "Escoraço II",
@@ -439,6 +455,8 @@ const escoras: Array<EscoraDTO> = [
     path: "escoraco_2",
     carga_minorada: 0,
     peso: 18.41,
+    max: 4.5,
+    min: 2.44,
   },
   {
     nome: "Escora 2T",
@@ -446,6 +464,8 @@ const escoras: Array<EscoraDTO> = [
     carga_adimissivel: 0,
     carga_minorada: 0,
     peso: 17.8,
+    max: 3,
+    min: 1.8,
   },
   {
     nome: "Escora Deck",
@@ -453,6 +473,8 @@ const escoras: Array<EscoraDTO> = [
     carga_adimissivel: 0,
     carga_minorada: 0,
     peso: 25.77,
+    max: 4.16,
+    min: 2.76,
   },
   {
     nome: "Escora Pa",
@@ -460,6 +482,8 @@ const escoras: Array<EscoraDTO> = [
     carga_adimissivel: 0,
     carga_minorada: 0,
     peso: 17.08,
+    max: 3.25,
+    min: 2.02,
   },
   {
     nome: "Escora Pb",
@@ -467,6 +491,8 @@ const escoras: Array<EscoraDTO> = [
     carga_adimissivel: 0,
     carga_minorada: 0,
     peso: 22.8,
+    max: 4.25,
+    min: 2.72,
   },
 ];
 
@@ -493,10 +519,11 @@ export default defineComponent({
     });
     const error = ref(false);
     var arrEscorasCarga: Array<any> = [];
-    
 
     function tipoLaje(): void {
-      state.tipoLajeMacica ? state.title = "Espessura (cm)" : state.title = "Capeamento (cm)"
+      state.tipoLajeMacica
+        ? (state.title = "Espessura (cm)")
+        : (state.title = "Capeamento (cm)");
     }
 
     function handleCalc(): void {
@@ -554,8 +581,8 @@ export default defineComponent({
         { nome: "Escora Deck", value: escora_deck, alias: "Escora_Deck" },
         { nome: "Escora Pa", value: escora_pa, alias: "Escora_Pa" },
         { nome: "Escora Pb", value: escora_pb, alias: "Escora_Pb" },
-      ]
-      
+      ];
+
       const arr: Array<EscoraDTO> = escoras;
 
       arr.map((item: EscoraDTO, i: number) => {
@@ -569,6 +596,8 @@ export default defineComponent({
           }
         });
       });
+
+      console.log(arrEscorasCarga);
     }
 
     function handleCargaAtuante(): void {
@@ -585,11 +614,39 @@ export default defineComponent({
       const peso_escora: Array<number> = [];
 
       const escoras_filtradas = escoras.filter((escora) => {
-        if (escora.carga_minorada > state.pesoProprioMajorado) {
+
+        if (
+          escora.carga_minorada > state.pesoProprioMajorado &&
+          escora.min <= Number(state.peDireito) &&
+          escora.max >= Number(state.peDireito)
+        ) { 
           peso_escora.push(escora.peso);
           return escora;
         }
       });
+
+      if (escoras_filtradas.length === 0) {
+        error.value = true;
+        toast.error(
+          "Nenhuma escora satisfaz os parâmetros solicitados"
+        );
+        state.peDireito = '',
+        state.capeamento = '',
+        state.tipoLajeMacica = false,
+        state.largura = '',
+        state.comprimento = ''
+        state.escoraResultante = [{} as EscoraDTO]
+        state.pesoProprio = 0
+        state.pesoProprioMajorado = 0
+        state.numeroDeEscorasLargura = 0
+        state.numeroDeEscorasComprimento = 0
+        state.distanciaEntreEscoras = 0
+        state.title = "Capeamento (cm)"
+        error.value = false
+        return
+      }
+
+      console.log("filtradas", escoras_filtradas);
 
       /* eslint-disable */
       //@ts-ignore
@@ -608,6 +665,7 @@ export default defineComponent({
         toast.error(
           "Os valores fornecidos não estão dentro dos limites aceitos"
         );
+        error.value = false
         return;
       }
     }
@@ -623,8 +681,6 @@ export default defineComponent({
         state.distanciaEntreEscoras =
           Number(state.largura) / state.numeroDeEscorasLargura;
       }
-
-
     }
 
     function handlePdf(): void {
@@ -701,7 +757,7 @@ export default defineComponent({
 
       doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
-      doc.text(`${state.title.replace(' (cm)', "")}`, 20, 60);
+      doc.text(`${state.title.replace(" (cm)", "")}`, 20, 60);
 
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
@@ -922,46 +978,46 @@ header {
 
 /*----------Toggle----------- */
 
-input[type=checkbox]{
-	height: 0;
-	width: 0;
-	visibility: hidden;
+input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
 }
 
 label {
-	cursor: pointer;
-	text-indent: -9999px;
-	width: 80px;
-	height: 40px;
-	background: grey;
-	display: block;
-	border-radius: 100px;
-	position: relative;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 80px;
+  height: 40px;
+  background: grey;
+  display: block;
+  border-radius: 100px;
+  position: relative;
 }
 
 label:after {
-	content: '';
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	width: 30px;
-	height: 30px;
-	background: #fff;
-	border-radius: 90px;
-	transition: 0.3s;
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
 }
 
 input:checked + label {
-	background: #198754;
+  background: #198754;
 }
 
 input:checked + label:after {
-	left: calc(100% - 5px);
-	transform: translateX(-100%);
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
 }
 
 label:active:after {
-	width: 130px;
+  width: 130px;
 }
 
 /*----------Footer----------- */
@@ -994,7 +1050,7 @@ footer {
     height: 470px;
   }
 
-  .footer-content{
+  .footer-content {
     flex-direction: column;
     margin-top: 20px !important;
   }
