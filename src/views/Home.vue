@@ -492,20 +492,8 @@ export default defineComponent({
       title: "Capeamento (cm)",
     });
     const error = ref(false);
-    const escoraço = -285.71 * Number(state.peDireito) + 1885.7;
-    const escoraço_2 = -291.29 * Number(state.peDireito) + 2010.67;
-    const escora_2t = -416.666 * Number(state.peDireito) + 3250;
-    const escora_deck = -571.42 * Number(state.peDireito) + 4827.14;
-    const escora_pa = -447.15 * Number(state.peDireito) + 3253.23;
-    const escora_pb = -261.43 * Number(state.peDireito) + 2611.11;
-    const arrEscorasCarga = [
-      { nome: "Escoraço", value: escoraço, alias: "Escoraço" },
-      { nome: "Escoraço II", value: escoraço_2, alias: "Escoraço_II" },
-      { nome: "Escora 2T", value: escora_2t, alias: "Escora_2T" },
-      { nome: "Escora Deck", value: escora_deck, alias: "Escora_Deck" },
-      { nome: "Escora Pa", value: escora_pa, alias: "Escora_Pa" },
-      { nome: "Escora Pb", value: escora_pb, alias: "Escora_Pb" },
-    ];
+    var arrEscorasCarga: Array<any> = [];
+    
 
     function tipoLaje(): void {
       state.tipoLajeMacica ? state.title = "Espessura (cm)" : state.title = "Capeamento (cm)"
@@ -553,6 +541,21 @@ export default defineComponent({
     }
 
     function handleCargaEscora(): void {
+      const escoraço = -285.71 * Number(state.peDireito) + 1885.7;
+      const escoraço_2 = -291.29 * Number(state.peDireito) + 2010.67;
+      const escora_2t = -416.666 * Number(state.peDireito) + 3250;
+      const escora_deck = -571.42 * Number(state.peDireito) + 4827.14;
+      const escora_pa = -447.15 * Number(state.peDireito) + 3253.23;
+      const escora_pb = -261.43 * Number(state.peDireito) + 2611.11;
+      arrEscorasCarga = [
+        { nome: "Escoraço", value: escoraço, alias: "Escoraço" },
+        { nome: "Escoraço II", value: escoraço_2, alias: "Escoraço_II" },
+        { nome: "Escora 2T", value: escora_2t, alias: "Escora_2T" },
+        { nome: "Escora Deck", value: escora_deck, alias: "Escora_Deck" },
+        { nome: "Escora Pa", value: escora_pa, alias: "Escora_Pa" },
+        { nome: "Escora Pb", value: escora_pb, alias: "Escora_Pb" },
+      ]
+      
       const arr: Array<EscoraDTO> = escoras;
 
       arr.map((item: EscoraDTO, i: number) => {
@@ -620,6 +623,8 @@ export default defineComponent({
         state.distanciaEntreEscoras =
           Number(state.largura) / state.numeroDeEscorasLargura;
       }
+
+
     }
 
     function handlePdf(): void {
